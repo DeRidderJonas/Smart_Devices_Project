@@ -1,6 +1,5 @@
-#define tilt 2
-#define changeDir 3
-#define startStop 4
+#define startStop 2
+#define tilt 3
 #define potPin A0
 bool left = true;
 bool tilted = false;
@@ -15,20 +14,18 @@ const long interval = 1000;
 void setup() {
   // put your setup code here, to run once:
   pinMode(tilt, INPUT);
-  pinMode(changeDir, INPUT);
   pinMode(startStop, INPUT);
   pinMode(potPin, INPUT);
-  attachInterrupt(digitalPinToInterrupt(tilt), toggleMoving, CHANGE);
-  attachInterrupt(digitalPinToInterrupt(changeDir), toggleDir, CHANGE);
-  attachInterrupt(digitalPinToInterrupt(startStop), toggleOn, CHANGE);
+  attachInterrupt(digitalPinToInterrupt(tilt), toggleMoving, RISING);
+  attachInterrupt(digitalPinToInterrupt(startStop), toggleOn, RISING);
   Serial.begin(9600);
 }
 
 void loop() {
   // put your main code here, to run repeatedly:
   potVal = analogRead(potPin);
-  Serial.print(potVal);
-  Serial.write("\n");
+ // Serial.println(potVal);
+  
 }
 
 void buttonPressed(int button){
@@ -40,40 +37,27 @@ void buttonPressed(int button){
       if(currentMillis - previousMillisTilt >= interval){
         previousMillisTilt = currentMillis;
         tilted = !tilted;
-        Serial.write("tilted " + tilted);
+        Serial.print(tilted);
       }
       break;
-    case 1:
-      previousMillis = previousMillisDir;
-      if(currentMillis - previousMillisDir >= interval){
-        previousMillisDir = currentMillis;
-        left = !left;
-        Serial.write("toggleDir " + left);
-      }
-      break;
-    case 2:
+      case 1:
       previousMillis = previousMillisStartStop;
       if(currentMillis - previousMillisStartStop >= interval){
         previousMillisStartStop = currentMillis;
         playing = !playing;
-        Serial.write("togglePlaying " + playing);
+        Serial.print(playing);
       }
       break;
   }
-  if(currentMillis - previousMillis >= interval){
-    
-  }
+  
 }
 
 void toggleMoving(){
   buttonPressed(0);
 }
 
-void toggleDir(){
-  buttonPressed(1);
-}
 
 void toggleOn(){
-  buttonPressed(2);
+  buttonPressed(1);
 }
 
