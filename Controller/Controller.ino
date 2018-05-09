@@ -24,7 +24,11 @@ void setup() {
 void loop() {
   // put your main code here, to run repeatedly:
   potVal = analogRead(potPin);
- // Serial.println(potVal);
+  if(potVal<=512){
+    Serial.print("left");
+  } else {
+    Serial.print("right");
+  }
   
 }
 
