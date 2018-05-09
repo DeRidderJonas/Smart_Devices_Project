@@ -68,9 +68,12 @@ void loop() {
 
 #define F5 698.46
 #define C5 523.25
-#define T  739.99
+#define GB5  739.99
 #define DB4 277.18
 #define BB4 466.16
+#define D1 36.71
+#define A0 27.50
+#define T 28.15
 
 #define BPM 120    //  you can change this value changing all the others
 #define H 2*Q //half 2/4
@@ -89,11 +92,11 @@ if(victory)
         delay(S+1);
         tone(sAudioPin, F5, D);
         delay(D+1);
-        tone(sAudioPin, T, Q);
+        tone(sAudioPin, GB5, Q);
         delay(Q+1);
         tone(sAudioPin, C5, Q);
         delay(Q+1);
-        delay(S);
+        delay(Q/6);
         tone(sAudioPin, C5, Q);
         delay(Q+1);
         tone(sAudioPin, F5, E);
@@ -107,7 +110,11 @@ if(victory)
       }
       else
       {
-        tone(sAudioPin, F5, Q);
+        tone(sAudioPin, T, W);
+        delay(Q);
+        tone(sAudioPin, A0, W);
+        delay(Q);
+        tone(sAudioPin, D1, Q);
       }
 }
 
