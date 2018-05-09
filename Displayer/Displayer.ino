@@ -9,8 +9,8 @@ SoftwareSerial mySerial(3,4);
 #define d7 5
 LiquidCrystal lcd(rs,enable,d4,d5,d6,d7);
 #define sAudioPin 12
-#define winLED 1
-#define lossLED 2
+#define winLED 13
+#define lossLED 11
 void setup() {
   // put your setup code here, to run once:
   lcd.begin(16,2);
@@ -35,17 +35,17 @@ void loop() {
     switch(inByte){
       case '1':
         lcd.clear();
-        playSound(true);
         digitalWrite(winLED, HIGH);
         lcd.write("winner winner");
         lcd.setCursor(0,1);
         lcd.write("Chicken dinner!");
+        playSound(true);
         break;
       case '2':
         lcd.clear();
-        playSound(false);
         digitalWrite(lossLED, HIGH);
         lcd.write("You lose!");
+        playSound(false);
         break;
       case '3':
         lcd.clear();
