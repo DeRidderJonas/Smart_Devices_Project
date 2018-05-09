@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>THE MAZE</title>
+    <link rel='stylesheet' href='/stylesheets/style.css' />
+  </head>
+  <body>
+    <h1>THE MAZE</h1>
+    <p>Welcome to THE MAZE</p>
+    <button class="playerButton" id="up">up</button>
+    <button class="playerButton" id="left">left</button>
+    <button class="playerButton" id="right">right</button>
+    <button class="playerButton" id="down">down</button>
+
+    <script>
+        const mazeName = "<%= mazeName %>";
+        const height = "<%= height %>";
+        const width = "<%= width %>";
+    </script>
+    <script src="/javascripts/jquery-3.1.0.min.js"></script>
+    <script src="/socket.io/socket.io.js"></script>
+    <script src="/javascripts/doolhof.js"></script>
+    <script src="/javascripts/index.js"></script>
+  </body>
+</html>

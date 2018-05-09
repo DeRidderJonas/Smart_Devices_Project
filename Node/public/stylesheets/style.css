@@ -1,0 +1,50 @@
+body {
+  padding: 50px;
+  font: 14px "Lucida Grande", Helvetica, Arial, sans-serif;
+}
+
+a {
+  color: #00B7FF;
+}
+
+table, .grid {
+  border-spacing: 0;
+}
+
+.cell {
+  width: 20px;
+  height: 20px;
+}
+
+.topWall{
+  border-top: 1px solid black;
+}
+
+.leftWall{
+  border-left: 1px solid black;
+}
+
+.rightWall{
+  border-right: 1px solid black;
+}
+
+.bottomWall{
+  border-bottom: 1px solid black;
+}
+
+.beginMaze{
+  background-color: green;
+}
+
+.endMaze{
+  background-color: red;
+}
+
+.stop {
+  background-color: white;
+}
+
+.filled {
+  background-color: red;
+}
+
