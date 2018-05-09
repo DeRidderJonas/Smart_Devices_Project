@@ -37,6 +37,7 @@ void buttonPressed(int button){
       if(currentMillis - previousMillisTilt >= interval){
         previousMillisTilt = currentMillis;
         tilted = !tilted;
+        Serial.print("tilted: ");
         Serial.print(tilted);
       }
       break;
@@ -45,6 +46,7 @@ void buttonPressed(int button){
       if(currentMillis - previousMillisStartStop >= interval){
         previousMillisStartStop = currentMillis;
         playing = !playing;
+        Serial.print("playing: ");
         Serial.print(playing);
       }
       break;
