@@ -16,35 +16,35 @@ let moduleFile = function () {
         });
     }
 
-    function getMazeOrMakeNewMaze(mazeName, cb) {
-        fs.readFile('./backend/mazes.json', 'utf8', function (err, data) {
-            if (err) {
-                console.log(err);
-            } else {
-                let mazes = JSON.parse(data);
-                if (!doesMazeExist(mazes, mazeName)) {
-                    let maze = createNewMaze(mazeName, 16, 16);
-                    mazes.push(maze);
-                    mazes = JSON.stringify(mazes);
-                    saveMazes(mazes, function () {
-                        cb();
-                    });
-                } else {
-                    cb();
-                }
-            }
-        });
-    }
+    // function getMazeOrMakeNewMaze(mazeName, cb) {
+    //     fs.readFile('./backend/mazes.json', 'utf8', function (err, data) {
+    //         if (err) {
+    //             console.log(err);
+    //         } else {
+    //             let mazes = JSON.parse(data);
+    //             if (!doesMazeExist(mazes, mazeName)) {
+    //                 let maze = createNewMaze(mazeName, 16, 16);
+    //                 mazes.push(maze);
+    //                 mazes = JSON.stringify(mazes);
+    //                 saveMazes(mazes, function () {
+    //                     cb();
+    //                 });
+    //             } else {
+    //                 cb();
+    //             }
+    //         }
+    //     });
+    // }
 
-    function doesMazeExist(mazes, mazeName) {
-        let result = false;
-        mazes.forEach(function (maze) {
-            if (maze.id == mazeName) {
-                result = true;
-            }
-        });
-        return result;
-    }
+    // function doesMazeExist(mazes, mazeName) {
+    //     let result = false;
+    //     mazes.forEach(function (maze) {
+    //         if (maze.id == mazeName) {
+    //             result = true;
+    //         }
+    //     });
+    //     return result;
+    // }
 
 
 
@@ -214,7 +214,7 @@ let moduleFile = function () {
     }
 
     return {
-        GetMazeOrMakeNewMaze : getMazeOrMakeNewMaze,
+        //GetMazeOrMakeNewMaze : getMazeOrMakeNewMaze,
         GetMazeData : getMazeData,
         SaveMaze : saveMaze
     }

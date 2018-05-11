@@ -28,17 +28,7 @@ $(function () {
         element.addEventListener('click', function (event) {
             event.preventDefault();
             let directionToGo = this.id;
-            $.ajax({
-                url : "/maze/"+mazeName+"/1/"+directionToGo,
-                dataType : "json",
-                type : 'POST'
-            }).done(function (data) {
-                console.log(data);
-                if(data.won){
-                    alert("You won");
-                }
-            });
-            //socket.emit("movePlayer", directionToGo);
+            socket.emit("movePlayer", directionToGo);
         })
     });
 });

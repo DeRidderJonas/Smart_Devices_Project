@@ -6,34 +6,27 @@ const classes = require("./backend/classes");
 const mazeFile = require("./backend/fileFunctions");
 
 let moduleServerSocket = function () {
-    let SocketCombinations = [];
+    let socketConnected = 0;
     const serverSocket = io();
+    let mazeBeingEdited;
 
     serverSocket.on("connection", function (socket) {
-        //console.log(serverSocket.sockets.adapter.rooms); //check the rooms
+        socketConnected++;
         console.log("Connection received");
 
         socket.on("joinMaze", function (mazeName) {
             mazeFile.GetMazeData(mazeName, function (mazeJSON) {
                 if (mazeJSON != null) {
-                    let mazeForSocket = classes.ConvertJsonToMaze(mazeJSON);
-
-                    SocketCombinations.push({
-                        socket: socket,
-                        maze : mazeForSocket,
-                        player: mazeForSocket.player
-                    });
-
-                    socket.join('maze/' + mazeName);
+                    mazeBeingEdited = classes.ConvertJsonToMaze(mazeJSON);
 
                     socket.emit("updateMazeData",
-                        {cells : mazeForSocket.cells, beginPoint : mazeForSocket.beginPoint, endPoint : mazeForSocket.endPoint});
+                        {cells : mazeBeingEdited.cells, beginPoint : mazeBeingEdited.beginPoint, endPoint : mazeBeingEdited.endPoint});
                     socket.emit("updatePlayerData",
                         {
-                            previousX : mazeForSocket.beginPoint.x,
-                            previousY : mazeForSocket.beginPoint.y,
-                            newX : mazeForSocket.player.x,
-                            newY : mazeForSocket.player.y
+                            previousX : mazeBeingEdited.beginPoint.x,
+                            previousY : mazeBeingEdited.beginPoint.y,
+                            newX : mazeBeingEdited.player.x,
+                            newY : mazeBeingEdited.player.y
                         })
 
                 } else {
@@ -42,49 +35,45 @@ let moduleServerSocket = function () {
             });
         });
 
-        function parseDirection(dirAsString){
-            return classes.Directions.find(d => d.name == dirAsString);
-        }
-
         socket.on("movePlayer", function (directionString) {
             let direction = parseDirection(directionString);
-            let socketMazeData = SocketCombinations.find(comb => comb.socket == socket);
-            let maze = socketMazeData.maze;
-            let player = socketMazeData.player;
+            let player = mazeBeingEdited.player;
 
-            let jsonToSend = maze.updateMaze(player, direction);
-            socket.emit("updatePlayerData", jsonToSend);
+            let jsonToSend = mazeBeingEdited.updateMaze(player, direction);
+            serverSocket.sockets.emit("updatePlayerData", jsonToSend);
         });
 
         socket.on("disconnect", function () {
-            let ComboOfSocket = SocketCombinations.find(socketCombo => socketCombo.socket == socket);
-            if (ComboOfSocket != null) {
-                let maze = ComboOfSocket.maze;
-                maze.player = ComboOfSocket.player;
-                mazeFile.SaveMaze(maze, function (err) {
+            socketConnected--;
+            console.log("disconnected. Number of connections remaining: " + socketConnected);
+            if (socketConnected <= 0 && mazeBeingEdited != null) {
+                mazeFile.SaveMaze(mazeBeingEdited, function (err) {
                     if(err){
                         console.log(err);
                     } else {
-                        socket.leave('maze/' + maze.id);
-                        let index = SocketCombinations.indexOf(ComboOfSocket);
-                        SocketCombinations.splice(index, 1);
-                        console.log("disconnected");
+                        mazeBeingEdited = null;
+                        console.log("all disconnected, maze is saved");
                     }
                 });
             } else {
-                console.log("failed");
+                console.log("nothing happend");
             }
         });
     });
 
-    function movePlayerFromSerial(directionString) {
-        let socketMazeData = SocketCombinations.find(comb => comb.socket == socket);
-        let direction = parseDirection(directionString);
-        let maze = socketMazeData.maze;
-        let player = socketMazeData.player;
+    function parseDirection(dirAsString){
+        return classes.Directions.find(d => d.name == dirAsString);
+    }
 
-        let jsonToSend = maze.updateMaze(player, direction);
-        io.sockets.in("maze/"+maze.id).emit("updatePlayerData", jsonToSend);
+
+    function movePlayerFromSerial(directionString) {
+        let direction = parseDirection(directionString);
+        let player = mazeBeingEdited.player;
+
+        console.log(direction);
+
+        let jsonToSend = mazeBeingEdited.updateMaze(player, direction);
+        serverSocket.sockets.emit("updatePlayerData", jsonToSend);
     }
 
     return {

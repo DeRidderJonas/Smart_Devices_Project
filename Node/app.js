@@ -76,20 +76,16 @@ app.get("/", function (req, res) {
    res.redirect("/maze/ArduinoMaze");
 });
 
-app.get("/maze/:mazeName", function(req, res) {
-    let mazeName = req.params.mazeName;
-    mazesFile.GetMazeOrMakeNewMaze(mazeName, function () {
-        res.render("doolhof.ejs", {mazeName: mazeName, height : 16, width : 16});
-    })
+app.get("/maze/ArduinoMaze", function(req, res) {
+    // mazesFile.GetMazeOrMakeNewMaze("ArduinoMaze", function () {
+        res.render("doolhof.ejs", {mazeName: "ArduinoMaze", height : 16, width : 16});
+    //})
 });
 
 //testing
-app.post("/maze/:mazeName/:player/:direction", function (req, res) {
-    let mazeName = req.params.mazeName;
-    let player = req.params.player;
-    let direction = req.params.direction;
+function movePlayerInServerSocket(direction) {
     serverSocket.movePlayerFromSerial(direction);
-});
+}
 
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {
