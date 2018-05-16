@@ -97,7 +97,7 @@ function onRecieveData(data)
 function sendDataBluetooth(data)
 {
     console.log("Sending to displayer: " + data);
-    displayerSerialPort.write(data + "\n");
+    displayerSerialPort.write(data);
 }
 
 function showError(error)
