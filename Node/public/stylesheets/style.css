@@ -52,11 +52,14 @@ table, .grid {
   background-color: red;
 }
 
-#player {
+#player, #ruben {
   width: 24px;
   height: 24px;
   padding-left: 3px;
   padding-top: 3px;
+}
+
+#player{
   transform: rotate(-40deg);
 }
 table {

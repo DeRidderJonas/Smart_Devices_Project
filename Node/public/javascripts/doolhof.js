@@ -59,7 +59,7 @@ function updatePlayerLocations(mazeName, actualPlayer, previousX, previousY, x, 
     htmlPreviousCell.innerText = " ";
     let htmlCell = getCell(mazeName, y, x);
     if(actualPlayer){htmlCell.innerHTML = "<img id='player' src='../images/Koreman.png'/>"}
-    else{htmlCell.innerHTML = "<img id='ruben' src='#'/>"} //get ruben head
+    else{htmlCell.innerHTML = "<img id='ruben' src='../images/Ruben.png'/>"} //get ruben head
     playerPosition = htmlCell;
 }
 
