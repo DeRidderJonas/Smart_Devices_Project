@@ -42,7 +42,7 @@ function onRecieveData(data)
 
 function sendDataBluetooth(data)
 {
-    console.log("Sending to Droid: " + data);
+    console.log("Sending to displayer: " + data);
     //myPort.write(data + "\n");
 }
 
