@@ -82,24 +82,23 @@ let moduleServerSocket = function () {
 
     function pauseOrResumeMaze() {
         serverSocket.sockets.emit("toggleTimer");
-
-
     }
 
     function resetMaze() {
         let mazeName = mazeBeingEdited.id;
-        let cols = mazeBeingEdited.cols;
-        let rows = mazeBeingEdited.rows;
+        let cols = mazeBeingEdited.width;
+        let rows = mazeBeingEdited.height;
+
         mazeFile.createNewMaze(mazeName, cols, rows, function (maze) {
             mazeBeingEdited = maze;
             if (maze != null) {
-                sockets.emit("updateMazeData",
+                serverSocket.sockets.emit("updateMazeData",
                     {
                         cells: mazeBeingEdited.cells,
                         beginPoint: mazeBeingEdited.beginPoint,
                         endPoint: mazeBeingEdited.endPoint
                     });
-                sockets.emit("updatePlayerData",
+                serverSocket.sockets.emit("updatePlayerData",
                     {
                         previousX: mazeBeingEdited.beginPoint.x,
                         previousY: mazeBeingEdited.beginPoint.y,
@@ -108,7 +107,7 @@ let moduleServerSocket = function () {
                     })
 
             } else {
-                sockets.emit("Error", "no Maze Found");
+                serverSocket.sockets.emit("Error", "no Maze Found");
             }
         });
     }
