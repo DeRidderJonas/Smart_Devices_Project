@@ -14,11 +14,10 @@ let moduleServerSocket = function () {
         socketConnected++;
         console.log("Connection received");
 
-        socket.on("joinMaze", function (mazeName) {
-            mazeFile.GetMazeData(mazeName, function (mazeJSON) {
-                if (mazeJSON != null) {
-                    mazeBeingEdited = classes.ConvertJsonToMaze(mazeJSON);
-
+        socket.on("joinMaze", function (mazeData) {
+            mazeFile.createNewMaze(mazeData.mazeName, mazeData.cols, mazeData.rows, function (maze) {
+                mazeBeingEdited = maze;
+                if (maze != null) {
                     socket.emit("updateMazeData",
                         {cells : mazeBeingEdited.cells, beginPoint : mazeBeingEdited.beginPoint, endPoint : mazeBeingEdited.endPoint});
                     socket.emit("updatePlayerData",
@@ -46,18 +45,6 @@ let moduleServerSocket = function () {
         socket.on("disconnect", function () {
             socketConnected--;
             console.log("disconnected. Number of connections remaining: " + socketConnected);
-            if (socketConnected <= 0 && mazeBeingEdited != null) {
-                mazeFile.SaveMaze(mazeBeingEdited, function (err) {
-                    if(err){
-                        console.log(err);
-                    } else {
-                        mazeBeingEdited = null;
-                        console.log("all disconnected, maze is saved");
-                    }
-                });
-            } else {
-                console.log("nothing happend");
-            }
         });
     });
 

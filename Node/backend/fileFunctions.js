@@ -6,7 +6,7 @@ var classes = require("./classes");
 
 let moduleFile = function () {
     function getMazes(cb) {
-        fs.readFile('./backend/mazes.json', 'utf8', function (err, data) {
+        fs.readFile('mazes.json', 'utf8', function (err, data) {
             if (err) {
                 console.log(err);
             } else {
@@ -49,7 +49,7 @@ let moduleFile = function () {
 
 
     function getMazeData(mazeName, cb) {
-        fs.readFile('./backend/mazes.json', 'utf8', function (err, data) {
+        fs.readFile('mazes.json', 'utf8', function (err, data) {
             if (err) {
                 console.log(err);
             } else {
@@ -75,7 +75,7 @@ let moduleFile = function () {
     }
 
     function saveMazes(mazes, cb) {
-        fs.writeFile("./backend/mazes.json", mazes, function (err) {
+        fs.writeFile("mazes.json", mazes, function (err) {
             if (err) {
                 return console.log(err);
             }
@@ -94,7 +94,7 @@ let moduleFile = function () {
     }
 
     //maze generating
-    function createNewMaze(mazeName, rows, cols) {
+    function createNewMaze(mazeName, rows, cols, cb) {
         let player = new classes.Player(0, 0);
         const cellsForMaze = makeTwoDimensionalArray(rows, cols);
         const directions = [
@@ -136,7 +136,7 @@ let moduleFile = function () {
             }
         }
         maze.selectBeginAndEndPoint(possibleEndPoints);
-        return maze;
+        cb(maze);
     }
 
     function makeTwoDimensionalArray(size1, size2) {
@@ -215,7 +215,8 @@ let moduleFile = function () {
 
     return {
         //GetMazeOrMakeNewMaze : getMazeOrMakeNewMaze,
-        GetMazeData : getMazeData,
+        //GetMazeData : getMazeData,
+        createNewMaze : createNewMaze,
         SaveMaze : saveMaze
     }
 }();

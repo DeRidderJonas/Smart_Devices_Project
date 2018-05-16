@@ -5,7 +5,11 @@ $(function () {
 
     console.log(mazeName);
     const socket = io();
-    socket.emit("joinMaze", mazeName);
+    let duration = 10;
+    let interval;
+    startTimer();
+
+    socket.emit("joinMaze", {mazeName: mazeName, cols: width, rows:height});
 
     createMazeGridHtml(mazeName, height, width);
 
@@ -31,4 +35,26 @@ $(function () {
             socket.emit("movePlayer", directionToGo);
         })
     });
+
+
+    function startTimer() {
+        interval = setInterval(countdownTimer, 1000);
+    }
+
+    function countdownTimer() {
+        let minutes, seconds;
+        minutes = parseInt(duration / 60, 10);
+        seconds = parseInt(duration % 60, 10);
+
+        minutes = minutes < 10 ? "0" + minutes : minutes;
+        seconds = seconds < 10 ? "0" + seconds : seconds;
+
+        let display = document.getElementById("time");
+        display.textContent = minutes + ":" + seconds;
+
+        if (--duration < 0) {
+            clearInterval(interval);
+            socket.emit("Lost", true);
+        }
+    }
 });
