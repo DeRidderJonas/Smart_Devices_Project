@@ -14,6 +14,8 @@ const controllerPort = process.argv[2];
 const displayPort = process.argv[3];
 
 let reset = false;
+let scores = ["1", "100"];
+serverSocket.setHighscores(scores);
 
 const ControllerSerialPort = new serialport(controllerPort, {
     bauttRate: 9600

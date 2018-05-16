@@ -13,6 +13,7 @@ let moduleServerSocket = function () {
     this.wonGame = false;
     this.time = 0;
     this.lostGame = false;
+    this.scores = [];
 
     serverSocket.on("connection", function (socket) {
         socketConnected++;
@@ -34,8 +35,8 @@ let moduleServerSocket = function () {
                             previousY: mazeBeingEdited.beginPoint.y,
                             newX: mazeBeingEdited.player.x,
                             newY: mazeBeingEdited.player.y
-                        })
-
+                        });
+                    insertHighscores();
                 } else {
                     socket.emit("Error", "no Maze Found");
                 }
@@ -112,13 +113,24 @@ let moduleServerSocket = function () {
         });
     }
 
+    function setHighscores(highscores) {
+        serverSocket.scores = highscores;
+        console.log("set scores", serverSocket.scores);
+    }
+
+    function insertHighscores() {
+        console.log("emitting scores", serverSocket.scores);
+        serverSocket.sockets.emit("insertHighscores", serverSocket.scores);
+    }
+
     return {
         serverSocket: serverSocket,
         movePlayerFromSerial: movePlayerFromSerial,
         pauseOrResumeMaze: pauseOrResumeMaze,
         resetMaze : resetMaze,
         wonGame: this.wonGame,
-        lostGame: this.lostGame
+        lostGame: this.lostGame,
+        setHighscores
     }
 }();
 

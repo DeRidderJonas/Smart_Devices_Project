@@ -5,7 +5,7 @@ $(function () {
 
     console.log(mazeName);
     const socket = io();
-    let duration = 3;
+    let duration = 50;
     let isPaused = false;
     let interval;
     startTimer();
@@ -36,6 +36,16 @@ $(function () {
     socket.on("toggleTimer", function () {
         isPaused = !isPaused;
         pauseTimer();
+    });
+
+    socket.on("insertHighscores",function (highscores) {
+        console.log(highscores);
+        let highscoresUl = document.getElementById('highscores');
+        highscores.forEach(score=>{
+            let li = document.createElement('li');
+            li.innerText = score;
+            highscoresUl.appendChild(li)
+        });
     });
 
     Array.from(document.getElementsByClassName("playerButton")).forEach(function(element) {
