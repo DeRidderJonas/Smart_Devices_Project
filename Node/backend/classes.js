@@ -76,7 +76,7 @@ const moduleClasses = function () {
     Maze.prototype.checkIfWon = function (player) {
         if(player.x == this.endPoint.x && player.y == this.endPoint.y){
             return true;
-        }
+        }else return false;
     };
 
     function PlayerData() {
@@ -100,9 +100,7 @@ const moduleClasses = function () {
         jsonToSend.newX = player.x;
         jsonToSend.newY = player.y;
 
-        if(this.checkIfWon(player)) {
-            jsonToSend.won = true;
-        }
+        jsonToSend.won = this.checkIfWon(player);
         return jsonToSend
     };
 

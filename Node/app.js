@@ -13,6 +13,8 @@ const readline = require('readline');
 const controllerPort = process.argv[2];
 const displayPort = process.argv[3];
 
+let reset = false;
+
 const ControllerSerialPort = new serialport(controllerPort, {
     bauttRate: 9600
 });
@@ -21,10 +23,12 @@ const displayerSerialPort = new serialport(displayPort, {
     bauttRate: 9600
 });
 
-let r1 = readline.createInterface({
+let rl = readline.createInterface({
      input : process.stdin,
      output : process.stdout
 });
+
+rl.on('line', sendDataBluetooth);
 
 ControllerSerialPort.on('open', onOpen);
 ControllerSerialPort.on('data', onRecieveData);
@@ -64,15 +68,28 @@ function onRecieveData(data)
             break;
         case 4:
             msgToSend = "pause";
+            if(serverSocket.wonGame)reset = true;
             break;
         case 5:
             msgToSend = "resume";
+            if(serverSocket.wonGame)reset = true;
             break;
         default:
             msgToSend = "unknown command";
             break;
     }
     sendDataBluetooth("0");
+    if(serverSocket.wonGame){
+        sendDataBluetooth("1");
+    }
+    if(serverSocket.lostGame){
+        sendDataBluetooth("2");
+    }
+    if((serverSocket.wonGame || serverSocket.lostGame) && reset){
+        sendDataBluetooth("3");
+        //reset game
+    }
+
     sendDataBluetooth(msgToSend)
 
 }
@@ -80,7 +97,7 @@ function onRecieveData(data)
 function sendDataBluetooth(data)
 {
     console.log("Sending to displayer: " + data);
-    displayerSerialPort.write(data + "\n");
+    displayerSerialPort.write(data);
 }
 
 function showError(error)
