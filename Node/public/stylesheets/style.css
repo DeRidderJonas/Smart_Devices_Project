@@ -38,7 +38,10 @@ table, .grid {
 }
 
 .endMaze{
-  background-color: red;
+  background-image: url(../images/castle.png);
+  background-size: 30px;
+  background-repeat: no-repeat;
+  background-position: center;
 }
 
 .stop {
@@ -50,10 +53,11 @@ table, .grid {
 }
 
 #player {
-  width: 17px;
-  height: 17px;
+  width: 24px;
+  height: 24px;
   padding-left: 3px;
   padding-top: 3px;
+  transform: rotate(-40deg);
 }
 table {
   margin:auto;
