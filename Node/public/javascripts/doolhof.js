@@ -1,3 +1,5 @@
+let endPointPosition;
+
 function getId(tableId, row, col) {
     return `${tableId}-${row}-${col}`;
 }
@@ -40,11 +42,16 @@ function createMazeElement(id, cells, beginPoint, endPoint) {
         })
     });
 
-    let htmlBeginCell = getCell(id, beginPoint.y, beginPoint.y);
+    let htmlBeginCell = getCell(id, beginPoint.y, beginPoint.x);
     let htmlEndCell = getCell(id, endPoint.y, endPoint.x);
 
+    if(endPointPosition != null){
+        endPointPosition.classList.remove("endMaze");
+    }
+    endPointPosition = htmlEndCell;
+
     htmlBeginCell.classList.add("beginMaze");
-    htmlEndCell.classList.add("endMaze");
+    endPointPosition.classList.add("endMaze");
 }
 
 function updatePlayerLocations(mazeName, previousX, previousY, x, y) {
@@ -52,6 +59,7 @@ function updatePlayerLocations(mazeName, previousX, previousY, x, y) {
     htmlPreviousCell.innerText = " ";
     let htmlCell = getCell(mazeName, y, x);
     htmlCell.innerHTML = "<img id='player' src='../images/Koreman.png'/>";
+    playerPosition = htmlCell;
 }
 
 function getCell(gridId, row, col) {

@@ -91,22 +91,21 @@ let moduleServerSocket = function () {
         let rows = mazeBeingEdited.height;
 
         mazeFile.createNewMaze(mazeName, cols, rows, function (maze) {
-            mazeBeingEdited = maze;
             if (maze != null) {
                 serverSocket.sockets.emit("updateMazeData",
                     {
-                        cells: mazeBeingEdited.cells,
-                        beginPoint: mazeBeingEdited.beginPoint,
-                        endPoint: mazeBeingEdited.endPoint
+                        cells: maze.cells,
+                        beginPoint: maze.beginPoint,
+                        endPoint: maze.endPoint
                     });
                 serverSocket.sockets.emit("updatePlayerData",
                     {
-                        previousX: mazeBeingEdited.beginPoint.x,
-                        previousY: mazeBeingEdited.beginPoint.y,
-                        newX: mazeBeingEdited.player.x,
-                        newY: mazeBeingEdited.player.y
-                    })
-
+                        previousX: mazeBeingEdited.player.x,
+                        previousY: mazeBeingEdited.player.y,
+                        newX: maze.player.x,
+                        newY: maze.player.y
+                    });
+                mazeBeingEdited = maze;
             } else {
                 serverSocket.sockets.emit("Error", "no Maze Found");
             }
