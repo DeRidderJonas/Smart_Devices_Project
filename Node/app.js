@@ -30,7 +30,7 @@ let rl = readline.createInterface({
      output : process.stdout
 });
 
-rl.on('line', sendDataBluetooth);
+rl.on('line', onRecieveData);
 
 ControllerSerialPort.on('open', onOpen);
 ControllerSerialPort.on('data', onRecieveData);
@@ -87,6 +87,7 @@ function onRecieveData(data)
         sendDataBluetooth("3");
         console.log("reseting maze");
         serverSocket.resetMaze();
+        reset = false;
     }
 
     sendDataBluetooth(msgToSend)

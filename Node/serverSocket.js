@@ -52,10 +52,12 @@ let moduleServerSocket = function () {
         });
 
         socket.on("Lost", function (lost) {
+            console.log("game is lost");
             moduleServerSocket.lostGame = lost;
         });
 
         socket.on("Win", function (time) {
+            console.log("game is won");
             moduleServerSocket.wonGame = true;
             moduleServerSocket.time = time;
         });
@@ -96,7 +98,8 @@ let moduleServerSocket = function () {
                     {
                         cells: maze.cells,
                         beginPoint: maze.beginPoint,
-                        endPoint: maze.endPoint
+                        endPoint: maze.endPoint,
+                        reset: true
                     });
                 serverSocket.sockets.emit("updatePlayerData",
                     {

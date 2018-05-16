@@ -5,7 +5,8 @@ $(function () {
 
     console.log(mazeName);
     const socket = io();
-    let duration = 50;
+    const startDuration = 10;
+    let duration = startDuration;
     let isPaused = false;
     let interval;
     startTimer();
@@ -22,12 +23,18 @@ $(function () {
     socket.on("updateMazeData", function (mazeData) {
         console.log(mazeData);
         createMazeElement(mazeName, mazeData.cells, mazeData.beginPoint, mazeData.endPoint);
+        if(mazeData.reset){
+            duration = startDuration;
+            isPaused = false;
+            pauseTimer();
+        }
     });
 
     socket.on("updatePlayerData", function (playerData) {
         console.log(playerData);
         updatePlayerLocations(mazeName, playerData.previousX, playerData.previousY, playerData.newX, playerData.newY);
         if(playerData.won){
+            isPaused = true;
             pauseTimer();
             socket.emit("Win", duration);
         }
