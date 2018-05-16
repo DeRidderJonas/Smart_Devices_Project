@@ -1,6 +1,7 @@
 body {
   padding: 50px;
   font: 14px "Lucida Grande", Helvetica, Arial, sans-serif;
+  text-align: center;
 }
 
 a {
@@ -12,8 +13,8 @@ table, .grid {
 }
 
 .cell {
-  width: 20px;
-  height: 20px;
+  width: 30px;
+  height: 30px;
 }
 
 .topWall{
@@ -49,7 +50,11 @@ table, .grid {
 }
 
 #player {
-  width: 13px;
-  height: 13px;
-  padding-left: 5px;
+  width: 17px;
+  height: 17px;
+  padding-left: 3px;
+  padding-top: 3px;
+}
+table {
+  margin:auto;
 }

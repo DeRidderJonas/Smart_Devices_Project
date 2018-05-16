@@ -13,7 +13,7 @@ int dir = 0; //0 achteruit; 1 links; 2 vooruit; 3 rechts
 unsigned long previousMillisTilt = 0;
 unsigned long previousMillisDir = 0;
 unsigned long previousMillisStartStop = 0;
-const long interval = 500;
+const long interval = 300;
 
 void setup() {
   // put your setup code here, to run once:
