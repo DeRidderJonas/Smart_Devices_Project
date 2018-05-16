@@ -129,7 +129,7 @@ let moduleServerSocket = function () {
         resetMaze : resetMaze,
         wonGame: this.wonGame,
         lostGame: this.lostGame,
-        setHighscores
+        setHighscores, insertHighscores
     }
 }();
 

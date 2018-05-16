@@ -41,6 +41,7 @@ $(function () {
     socket.on("insertHighscores",function (highscores) {
         console.log(highscores);
         let highscoresUl = document.getElementById('highscores');
+        highscoresUl.innerHTML = '';
         highscores.forEach(score=>{
             let li = document.createElement('li');
             li.innerText = score;

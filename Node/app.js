@@ -97,6 +97,8 @@ setInterval(function () {
     if(serverSocket.wonGame && !playedSound){
         sendDataBluetooth("1");
         console.log("game won, score: ", serverSocket.time);
+        scores.push(serverSocket.time);
+        serverSocket.insertHighscores();
         playedSound = true;
     }
     if(serverSocket.lostGame && !playedSound){
