@@ -1,32 +1,37 @@
-var express = require('express');
-var path = require('path');
-var favicon = require('serve-favicon');
-var logger = require('morgan');
-var cookieParser = require('cookie-parser');
-var bodyParser = require('body-parser');
-var classes = require("./backend/classes");
-var mazesFile = require("./backend/fileFunctions");
-var serverSocket = require("./serverSocket");
-var serialport = require('serialport');
-var readline = require('readline');
+const express = require('express');
+const path = require('path');
+const favicon = require('serve-favicon');
+const logger = require('morgan');
+const cookieParser = require('cookie-parser');
+const bodyParser = require('body-parser');
+const classes = require("./backend/classes");
+const mazesFile = require("./backend/fileFunctions");
+const serverSocket = require("./serverSocket");
+const serialport = require('serialport');
+const readline = require('readline');
 
-// var portname = process.argv[2];
-//
-// var myPort = new serialport(portname, {
-//     bauttRate : 9600
-// });
-//
-// let r1 = readline().createInterface({
-//     input : process.stdin,
-//     output : process.stdout
-// });
-//
-// myPort.on('open', onOpen);
-// myPort.on('data', onRecieveData);
-// myPort.on('error', showError);
-//
-// r1.on('line', sendDataBluetooth);
+const controllerPort = process.argv[2];
+const displayPort = process.argv[3];
 
+const ControllerSerialPort = new serialport(controllerPort, {
+    bauttRate: 9600
+});
+
+const displayerSerialPort = new serialport(displayPort, {
+    bauttRate: 9600
+});
+
+let r1 = readline.createInterface({
+     input : process.stdin,
+     output : process.stdout
+});
+
+ControllerSerialPort.on('open', onOpen);
+ControllerSerialPort.on('data', onRecieveData);
+ControllerSerialPort.on('error', showError);
+
+displayerSerialPort.on('open', onOpen);
+displayerSerialPort.on('error', showError);
 //serial functions
 
 function onOpen()
@@ -38,12 +43,44 @@ function onRecieveData(data)
 {
     console.log("Received data: " + data);
     //send direction
+    let msgToSend;
+    let cmd = parseInt(data);
+    switch (cmd){
+        case 2:
+            msgToSend = "go up";
+            movePlayerInServerSocket("up");
+            break;
+        case 1:
+            msgToSend = "go left";
+            movePlayerInServerSocket("left");
+            break;
+        case 0:
+            msgToSend = "go down";
+            movePlayerInServerSocket("down");
+            break;
+        case 3:
+            msgToSend = "go right";
+            movePlayerInServerSocket("right");
+            break;
+        case 4:
+            msgToSend = "pause";
+            break;
+        case 5:
+            msgToSend = "resume";
+            break;
+        default:
+            msgToSend = "unknown command";
+            break;
+    }
+    sendDataBluetooth("0");
+    sendDataBluetooth(msgToSend)
+
 }
 
 function sendDataBluetooth(data)
 {
     console.log("Sending to displayer: " + data);
-    //myPort.write(data + "\n");
+    displayerSerialPort.write(data + "\n");
 }
 
 function showError(error)
@@ -54,7 +91,7 @@ function showError(error)
 // var index = require('./routes/index');
 // var users = require('./routes/users');
 
-var app = express();
+const app = express();
 
 // view engine setup
 app.set('views', path.join(__dirname, 'views'));
@@ -89,8 +126,8 @@ function movePlayerInServerSocket(direction) {
 
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {
-  var err = new Error('Not Found');
-  err.status = 404;
+    let err = new Error('Not Found');
+    err.status = 404;
   next(err);
 });
 
