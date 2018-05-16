@@ -19,7 +19,7 @@ const moduleClasses = function () {
         this.y = y;
         this.directionMoving = {x : 0, y : 0};
         this.isRuben = false;
-        this.goingDirection = {direction: "up", timesGoneThisDirection: 0};
+        this.directionInfo = {Goingdirection: "up", cameFromDirection: "down"};
     }
 
     Player.prototype.changeLocation = function (direction) {
