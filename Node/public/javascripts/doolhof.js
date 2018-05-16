@@ -51,7 +51,7 @@ function updatePlayerLocations(mazeName, previousX, previousY, x, y) {
     let htmlPreviousCell = getCell(mazeName, previousY, previousX);
     htmlPreviousCell.innerText = " ";
     let htmlCell = getCell(mazeName, y, x);
-    htmlCell.innerText = "x";
+    htmlCell.innerHTML = "<img id='player' src='../images/player.png'/>";
 }
 
 function getCell(gridId, row, col) {

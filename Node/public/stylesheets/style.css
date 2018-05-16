@@ -48,3 +48,8 @@ table, .grid {
   background-color: red;
 }
 
+#player {
+  width: 13px;
+  height: 13px;
+  padding-left: 5px;
+}
