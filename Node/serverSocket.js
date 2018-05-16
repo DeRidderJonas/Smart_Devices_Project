@@ -11,6 +11,7 @@ let moduleServerSocket = function () {
     const serverSocket = io();
     let mazeBeingEdited;
     this.wonGame = false;
+    this.time = 0;
     this.lostGame = false;
 
     serverSocket.on("connection", function (socket) {
@@ -50,7 +51,12 @@ let moduleServerSocket = function () {
         });
 
         socket.on("Lost", function (lost) {
-            this.lostGame = lost;
+            moduleServerSocket.lostGame = lost;
+        });
+
+        socket.on("Win", function (time) {
+            moduleServerSocket.wonGame = true;
+            moduleServerSocket.time = time;
         });
 
         socket.on("disconnect", function () {
@@ -71,12 +77,13 @@ let moduleServerSocket = function () {
         console.log(direction);
 
         let jsonToSend = mazeBeingEdited.updateMaze(player, direction);
-        this.wonGame = jsonToSend.won;
         serverSocket.sockets.emit("updatePlayerData", jsonToSend);
     }
 
     function pauseOrResumeMaze() {
-        serverSocket.sockets.emit("pauseGame");
+        serverSocket.sockets.emit("toggleTimer");
+
+
     }
 
     function resetMaze() {

@@ -80,21 +80,29 @@ function onRecieveData(data)
             msgToSend = "unknown command";
             break;
     }
-    sendDataBluetooth("0");
-    if(serverSocket.wonGame){
-        sendDataBluetooth("1");
-    }
-    if(serverSocket.lostGame){
-        sendDataBluetooth("2");
-    }
+
     if((serverSocket.wonGame || serverSocket.lostGame) && reset){
         sendDataBluetooth("3");
+        console.log("reseting maze");
         serverSocket.resetMaze();
     }
 
     sendDataBluetooth(msgToSend)
 
 }
+let playedSound = false;
+setInterval(function () {
+    if(serverSocket.wonGame && !playedSound){
+        sendDataBluetooth("1");
+        console.log("game won, score: ", serverSocket.time);
+        playedSound = true;
+    }
+    if(serverSocket.lostGame && !playedSound){
+        sendDataBluetooth("2");
+        console.log("game lost");
+        playedSound = true;
+    }
+}, 500);
 
 function sendDataBluetooth(data)
 {

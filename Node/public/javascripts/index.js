@@ -5,10 +5,11 @@ $(function () {
 
     console.log(mazeName);
     const socket = io();
-    let duration = 10;
+    let duration = 3;
     let isPaused = false;
     let interval;
     startTimer();
+
 
     socket.emit("joinMaze", {mazeName: mazeName, cols: width, rows:height});
 
@@ -26,12 +27,16 @@ $(function () {
     socket.on("updatePlayerData", function (playerData) {
         console.log(playerData);
         updatePlayerLocations(mazeName, playerData.previousX, playerData.previousY, playerData.newX, playerData.newY);
+        if(playerData.won){
+            pauseTimer();
+            socket.emit("Win", duration);
+        }
     });
 
-    socket.on("pauzeGame", function () {
+    socket.on("toggleTimer", function () {
+        isPaused = !isPaused;
         pauseTimer();
     });
-
 
     Array.from(document.getElementsByClassName("playerButton")).forEach(function(element) {
         element.addEventListener('click', function (event) {
