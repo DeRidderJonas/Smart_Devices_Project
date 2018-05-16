@@ -68,11 +68,13 @@ function onRecieveData(data)
             break;
         case 4:
             msgToSend = "pause";
-            if(serverSocket.wonGame)reset = true;
+            if(serverSocket.wonGame || serverSocket.lostGame) {reset = true;}
+            else serverSocket.pauseOrResumeMaze();
             break;
         case 5:
             msgToSend = "resume";
-            if(serverSocket.wonGame)reset = true;
+            if(serverSocket.wonGame || serverSocket.lostGame)reset = true;
+            else serverSocket.pauseOrResumeMaze();
             break;
         default:
             msgToSend = "unknown command";
@@ -87,7 +89,7 @@ function onRecieveData(data)
     }
     if((serverSocket.wonGame || serverSocket.lostGame) && reset){
         sendDataBluetooth("3");
-        //reset game
+        serverSocket.resetMaze();
     }
 
     sendDataBluetooth(msgToSend)

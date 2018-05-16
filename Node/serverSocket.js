@@ -49,6 +49,10 @@ let moduleServerSocket = function () {
             serverSocket.sockets.emit("updatePlayerData", jsonToSend);
         });
 
+        socket.on("Lost", function (lost) {
+            this.lostGame = lost;
+        });
+
         socket.on("disconnect", function () {
             socketConnected--;
             console.log("disconnected. Number of connections remaining: " + socketConnected);
@@ -71,9 +75,42 @@ let moduleServerSocket = function () {
         serverSocket.sockets.emit("updatePlayerData", jsonToSend);
     }
 
+    function pauseOrResumeMaze() {
+        serverSocket.sockets.emit("pauseGame");
+    }
+
+    function resetMaze() {
+        let mazeName = mazeBeingEdited.id;
+        let cols = mazeBeingEdited.cols;
+        let rows = mazeBeingEdited.rows;
+        mazeFile.createNewMaze(mazeName, cols, rows, function (maze) {
+            mazeBeingEdited = maze;
+            if (maze != null) {
+                sockets.emit("updateMazeData",
+                    {
+                        cells: mazeBeingEdited.cells,
+                        beginPoint: mazeBeingEdited.beginPoint,
+                        endPoint: mazeBeingEdited.endPoint
+                    });
+                sockets.emit("updatePlayerData",
+                    {
+                        previousX: mazeBeingEdited.beginPoint.x,
+                        previousY: mazeBeingEdited.beginPoint.y,
+                        newX: mazeBeingEdited.player.x,
+                        newY: mazeBeingEdited.player.y
+                    })
+
+            } else {
+                sockets.emit("Error", "no Maze Found");
+            }
+        });
+    }
+
     return {
         serverSocket: serverSocket,
         movePlayerFromSerial: movePlayerFromSerial,
+        pauseOrResumeMaze: pauseOrResumeMaze,
+        resetMaze : resetMaze,
         wonGame: this.wonGame,
         lostGame: this.lostGame
     }

@@ -6,6 +6,7 @@ $(function () {
     console.log(mazeName);
     const socket = io();
     let duration = 10;
+    let isPaused = false;
     let interval;
     startTimer();
 
@@ -27,6 +28,10 @@ $(function () {
         updatePlayerLocations(mazeName, playerData.previousX, playerData.previousY, playerData.newX, playerData.newY);
     });
 
+    socket.on("pauzeGame", function () {
+        pauseTimer();
+    });
+
 
     Array.from(document.getElementsByClassName("playerButton")).forEach(function(element) {
         element.addEventListener('click', function (event) {
@@ -39,6 +44,13 @@ $(function () {
 
     function startTimer() {
         interval = setInterval(countdownTimer, 1000);
+    }
+    function pauseTimer() {
+        if(isPaused){
+            clearInterval(interval);
+        } else {
+            startTimer();
+        }
     }
 
     function countdownTimer() {
