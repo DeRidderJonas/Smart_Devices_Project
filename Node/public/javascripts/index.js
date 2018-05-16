@@ -1,14 +1,44 @@
 "use strict";
 
+const socket = io();
+const startDuration = 10;
+let duration = startDuration;
+let isPaused = false;
+let interval;
+
+function startTimer() {
+    interval = setInterval(countdownTimer, 1000);
+}
+function pauseTimer() {
+    if(isPaused){
+        clearInterval(interval);
+    } else {
+        startTimer();
+    }
+}
+
+function countdownTimer() {
+    let minutes, seconds;
+    minutes = parseInt(duration / 60, 10);
+    seconds = parseInt(duration % 60, 10);
+
+    minutes = minutes < 10 ? "0" + minutes : minutes;
+    seconds = seconds < 10 ? "0" + seconds : seconds;
+
+    let display = document.getElementById("time");
+    display.textContent = minutes + ":" + seconds;
+
+    if (--duration < 0) {
+        clearInterval(interval);
+        socket.emit("Lost", true);
+    }
+}
+
 $(function () {
     console.log("JQUERY AND DOM READY");
 
     console.log(mazeName);
-    const socket = io();
-    const startDuration = 10;
-    let duration = startDuration;
-    let isPaused = false;
-    let interval;
+
     startTimer();
 
 
@@ -32,7 +62,7 @@ $(function () {
 
     socket.on("updatePlayerData", function (playerData) {
         console.log(playerData);
-        updatePlayerLocations(mazeName, playerData.previousX, playerData.previousY, playerData.newX, playerData.newY);
+        updatePlayerLocations(mazeName, true, playerData.previousX, playerData.previousY, playerData.newX, playerData.newY);
         if(playerData.won){
             isPaused = true;
             pauseTimer();
@@ -65,31 +95,5 @@ $(function () {
     });
 
 
-    function startTimer() {
-        interval = setInterval(countdownTimer, 1000);
-    }
-    function pauseTimer() {
-        if(isPaused){
-            clearInterval(interval);
-        } else {
-            startTimer();
-        }
-    }
 
-    function countdownTimer() {
-        let minutes, seconds;
-        minutes = parseInt(duration / 60, 10);
-        seconds = parseInt(duration % 60, 10);
-
-        minutes = minutes < 10 ? "0" + minutes : minutes;
-        seconds = seconds < 10 ? "0" + seconds : seconds;
-
-        let display = document.getElementById("time");
-        display.textContent = minutes + ":" + seconds;
-
-        if (--duration < 0) {
-            clearInterval(interval);
-            socket.emit("Lost", true);
-        }
-    }
 });

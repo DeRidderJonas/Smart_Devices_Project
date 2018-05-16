@@ -54,11 +54,12 @@ function createMazeElement(id, cells, beginPoint, endPoint) {
     endPointPosition.classList.add("endMaze");
 }
 
-function updatePlayerLocations(mazeName, previousX, previousY, x, y) {
+function updatePlayerLocations(mazeName, actualPlayer, previousX, previousY, x, y) {
     let htmlPreviousCell = getCell(mazeName, previousY, previousX);
     htmlPreviousCell.innerText = " ";
     let htmlCell = getCell(mazeName, y, x);
-    htmlCell.innerHTML = "<img id='player' src='../images/Koreman.png'/>";
+    if(actualPlayer){htmlCell.innerHTML = "<img id='player' src='../images/Koreman.png'/>"}
+    else{htmlCell.innerHTML = "<img id='ruben' src='#'/>"} //get ruben head
     playerPosition = htmlCell;
 }
 
