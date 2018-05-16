@@ -70,6 +70,10 @@ $(function () {
         }
     });
 
+    socket.on("updateRubenData", function (rubenData) {
+        updatePlayerLocations(mazeName, false, rubenData.previousX, rubenData.previousY, rubenData.newX, rubenData.newY);
+    });
+
     socket.on("toggleTimer", function () {
         isPaused = !isPaused;
         pauseTimer();

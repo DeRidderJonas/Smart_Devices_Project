@@ -18,6 +18,8 @@ const moduleClasses = function () {
         this.x = x;
         this.y = y;
         this.directionMoving = {x : 0, y : 0};
+        this.isRuben = false;
+        this.goingDirection = {direction: "up", timesGoneThisDirection: 0};
     }
 
     Player.prototype.changeLocation = function (direction) {
@@ -66,6 +68,8 @@ const moduleClasses = function () {
     function Maze(id, player, width, height, cells, beginPoint, endPoint) {
         this.id = id;
         this.player = player;
+        this.ruben = new Player(Math.floor(Math.random()*width), Math.floor(Math.random()*height));
+        this.ruben.isRuben = true;
         this.width = width;
         this.height = height;
         this.cells = cells;
@@ -93,8 +97,13 @@ const moduleClasses = function () {
         jsonToSend.previousY = player.y;
 
         if(this.validatePlayerMove(player, direction)) {
-            this.player = player;
-            this.player.changeLocation(direction);
+            if(!player.isRuben){
+                this.player = player;
+                this.player.changeLocation(direction);
+            }else{
+                this.ruben = player;
+                this.ruben.changeLocation(direction);
+            }
         }
 
         jsonToSend.newX = player.x;
