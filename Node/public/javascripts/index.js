@@ -34,6 +34,19 @@ function countdownTimer() {
     }
 }
 
+function showRandomRubenMeme() {
+    let rootFolder = "/images/";
+    let imgPaths = ["spy.jpg","KingOfHearts.png","kore empire flag.jpg", "mlp.png", "PatrickWest.png","TheBattleHasBegun.png","ToBattleMen.gif"];
+    let randomMemePath = imgPaths[Math.floor(Math.random()*imgPaths.length)];
+    let $meme = document.getElementById("meme");
+    $meme.src = rootFolder + randomMemePath;
+    $meme.style.display = "block";
+    setTimeout(function () {
+        $meme.src = "#";
+        $meme.style.display = "none";
+    }, 1000);
+}
+
 $(function () {
     console.log("JQUERY AND DOM READY");
 
@@ -60,10 +73,11 @@ $(function () {
             pauseTimer();
         }
     });
-
+    let playerCurrCoords;
     socket.on("updatePlayerData", function (playerData) {
         console.log(playerData);
         updatePlayerLocations(mazeName, true, playerData.previousX, playerData.previousY, playerData.newX, playerData.newY);
+        playerCurrCoords = {x:playerData.newX, y:playerData.newY};
         if(playerData.won){
             isPaused = true;
             pauseTimer();
@@ -73,6 +87,10 @@ $(function () {
 
     socket.on("updateRubenData", function (rubenData) {
         updatePlayerLocations(mazeName, false, rubenData.previousX, rubenData.previousY, rubenData.newX, rubenData.newY);
+        if(playerCurrCoords.x === rubenData.newX && playerCurrCoords.y === rubenData.newY){
+            duration -= 10;
+            showRandomRubenMeme();
+        }
     });
 
     socket.on("toggleTimer", function () {

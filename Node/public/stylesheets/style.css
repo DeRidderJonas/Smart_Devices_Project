@@ -65,3 +65,11 @@ table, .grid {
 table {
   margin:auto;
 }
+
+#meme{
+  width: 30%;
+  position: absolute;
+  left: 35%;
+  top: 50%;
+  z-index: 50;
+}
