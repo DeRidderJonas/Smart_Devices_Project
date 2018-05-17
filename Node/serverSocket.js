@@ -106,8 +106,39 @@ let moduleServerSocket = function () {
 
             } while (!mazeBeingEdited.validatePlayerMove(ruben, rubenDirection));
 
-            let rubenToSend = mazeBeingEdited.updateMaze(ruben, rubenDirection);
+
+            let availableDirections = ["up","down","left","right"].filter(dir=>mazeBeingEdited.validatePlayerMove(ruben, parseDirection(dir)))
+                .filter(dir=>dir !== rubenDirectionInfo.cameFromDirection);
+            if(availableDirections.length > 0){
+                let randomDir = Math.floor(Math.random()*availableDirections.length);
+                rubenDirection = availableDirections[randomDir];
+                ruben.directionInfo.cameFromDirection = findCounterDirection(availableDirections[randomDir]);
+            }else{
+                rubenDirection = ruben.directionInfo.cameFromDirection;
+                ruben.directionInfo.cameFromDirection = findCounterDirection(ruben.directionInfo.cameFromDirection);
+            }
+
+            let rubenToSend = mazeBeingEdited.updateMaze(ruben, parseDirection(rubenDirection));
             serverSocket.sockets.emit("updateRubenData", rubenToSend);
+        }
+    }
+
+    function findCounterDirection(dir){
+        switch(dir){
+            case "up":
+                return "down";
+                break;
+            case "down":
+                return "up";
+                break;
+            case "left":
+                return "right";
+                break;
+            case "right":
+                return "left";
+                break;
+            default:
+                return "none";
         }
     }
 

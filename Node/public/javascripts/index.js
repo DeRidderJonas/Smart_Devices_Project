@@ -1,7 +1,7 @@
 "use strict";
 
 const socket = io();
-const startDuration = 10;
+const startDuration = 10*60;
 let duration = startDuration;
 let isPaused = false;
 let interval;
