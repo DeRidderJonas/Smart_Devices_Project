@@ -13,8 +13,8 @@ function createMazeGridHtml(id, height, width) {
     table.cols = width;
 
     table.classList.add("grid");
-
-    document.body.appendChild(table);
+    document.getElementById("maze").appendChild(table);
+    // document.body.appendChild(table);
 
     for (let r = 0; r < height; r++) {
         let row = document.createElement('tr');

@@ -61,7 +61,13 @@ table, .grid {
 
 #player{
   transform: rotate(-40deg);
+  z-index: 5;
 }
+
+#time{
+  border: solid 1px black
+}
+
 table {
   margin:auto;
 }

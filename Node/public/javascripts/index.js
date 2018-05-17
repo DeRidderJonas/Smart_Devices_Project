@@ -36,7 +36,8 @@ function countdownTimer() {
 
 function showRandomRubenMeme() {
     let rootFolder = "/images/";
-    let imgPaths = ["spy.jpg","KingOfHearts.png","kore empire flag.jpg", "mlp.png", "PatrickWest.png","TheBattleHasBegun.png","ToBattleMen.gif"];
+    let imgPaths = ["spy.jpg","KingOfHearts.png","kore empire flag.jpg", "mlp.png",
+        "PatrickWest.png","TheBattleHasBegun.png","ToBattleMen.gif"];
     let randomMemePath = imgPaths[Math.floor(Math.random()*imgPaths.length)];
     let $meme = document.getElementById("meme");
     $meme.src = rootFolder + randomMemePath;
