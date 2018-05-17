@@ -54,6 +54,7 @@ $(function () {
         console.log(mazeData);
         createMazeElement(mazeName, mazeData.cells, mazeData.beginPoint, mazeData.endPoint);
         if(mazeData.reset){
+            document.getElementById('ruben').parentNode.removeChild(document.getElementById('ruben'));
             duration = startDuration;
             isPaused = false;
             pauseTimer();

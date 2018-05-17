@@ -88,13 +88,27 @@ let moduleServerSocket = function () {
 
 
     function movePlayerFromSerial(directionString) {
-        let direction = parseDirection(directionString);
-        let player = mazeBeingEdited.player;
+        if(!moduleServerSocket.wonGame && !moduleServerSocket.lostGame){
+            let direction = parseDirection(directionString);
+            let player = mazeBeingEdited.player;
 
-        console.log(direction);
+            let jsonToSend = mazeBeingEdited.updateMaze(player, direction);
+            serverSocket.sockets.emit("updatePlayerData", jsonToSend);
 
-        let jsonToSend = mazeBeingEdited.updateMaze(player, direction);
-        serverSocket.sockets.emit("updatePlayerData", jsonToSend);
+            let ruben = mazeBeingEdited.ruben;
+            let rubenDirectionInfo = ruben.directionInfo;
+            let rubenDirection;
+            let stuckCounter = 0;
+            do {
+                let randomDir = Math.floor(Math.random() * 4);
+                rubenDirection = parseDirection([{id: 0, dir: "up"}, {id: 1, dir: "down"}, {id: 2, dir: "left"}, {id: 3, dir: "right"}]
+                    .filter(d => d.id === randomDir).map(d => d.dir));
+
+            } while (!mazeBeingEdited.validatePlayerMove(ruben, rubenDirection));
+
+            let rubenToSend = mazeBeingEdited.updateMaze(ruben, rubenDirection);
+            serverSocket.sockets.emit("updateRubenData", rubenToSend);
+        }
     }
 
     function pauseOrResumeMaze() {
@@ -102,6 +116,8 @@ let moduleServerSocket = function () {
     }
 
     function resetMaze() {
+        moduleServerSocket.wonGame = false;
+        moduleServerSocket.lostGame = false;
         let mazeName = mazeBeingEdited.id;
         let cols = mazeBeingEdited.width;
         let rows = mazeBeingEdited.height;
