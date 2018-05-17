@@ -1,7 +1,7 @@
 "use strict";
 
 const socket = io();
-const startDuration = 10*60;
+const startDuration = 10*6;
 let duration = startDuration;
 let isPaused = false;
 let interval;
@@ -70,6 +70,7 @@ $(function () {
         if(mazeData.reset){
             document.getElementById('ruben').parentNode.removeChild(document.getElementById('ruben'));
             duration = startDuration;
+            console.log("timer reset");
             isPaused = false;
             pauseTimer();
         }

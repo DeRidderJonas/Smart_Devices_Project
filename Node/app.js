@@ -14,6 +14,7 @@ const controllerPort = process.argv[2];
 const displayPort = process.argv[3];
 
 let reset = false;
+let paused = false;
 let scores = [];
 serverSocket.setHighscores(scores);
 
@@ -54,27 +55,29 @@ function onRecieveData(data)
     switch (cmd){
         case 2:
             msgToSend = "go up";
-            movePlayerInServerSocket("up");
+            if(!paused)movePlayerInServerSocket("up");
             break;
         case 1:
             msgToSend = "go left";
-            movePlayerInServerSocket("left");
+            if(!paused)movePlayerInServerSocket("left");
             break;
         case 0:
             msgToSend = "go down";
-            movePlayerInServerSocket("down");
+            if(!paused)movePlayerInServerSocket("down");
             break;
         case 3:
             msgToSend = "go right";
-            movePlayerInServerSocket("right");
+            if(!paused)movePlayerInServerSocket("right");
             break;
         case 4:
             msgToSend = "pause";
+            paused = true;
             if(serverSocket.wonGame || serverSocket.lostGame) {reset = true;}
             else serverSocket.pauseOrResumeMaze();
             break;
         case 5:
             msgToSend = "resume";
+            paused = false;
             if(serverSocket.wonGame || serverSocket.lostGame)reset = true;
             else serverSocket.pauseOrResumeMaze();
             break;
