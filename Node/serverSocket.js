@@ -109,7 +109,8 @@ let moduleServerSocket = function () {
 
             let availableDirections = ["up","down","left","right"].filter(dir=>mazeBeingEdited.validatePlayerMove(ruben, parseDirection(dir)))
                 .filter(dir=>dir !== rubenDirectionInfo.cameFromDirection);
-            if(availableDirections.length > 0){
+            let randomChanceToTurnAround = Math.random();
+            if(randomChanceToTurnAround < 0.97 && availableDirections.length > 0){
                 let randomDir = Math.floor(Math.random()*availableDirections.length);
                 rubenDirection = availableDirections[randomDir];
                 ruben.directionInfo.cameFromDirection = findCounterDirection(availableDirections[randomDir]);
